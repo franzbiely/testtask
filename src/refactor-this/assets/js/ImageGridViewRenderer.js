@@ -1,11 +1,13 @@
 
-const e = React.createElement;
+
 const {useState, useEffect} = React
+const e = React.createElement;
 
 const ImageGridViewRenderer = (props) => {
   const [page, setPage] = useState(1)
   const [images, setImages] = useState([])
   const [type, setType] = useState('nature')
+  const [loading, setLoading] = useState(false)
 
   const nextLink = window.location.search.split('&page')[0] + '&page=' + (page + 1)
   const prevLink = window.location.search.split('&page')[0] + '&page=' + (page - 1)
@@ -38,6 +40,7 @@ const ImageGridViewRenderer = (props) => {
     let rows = 3 
     let newImage;
     const newImages = [...images]
+    setLoading(true)
     while(rows > 0) {
       rows--;
       
@@ -50,6 +53,7 @@ const ImageGridViewRenderer = (props) => {
       newImages.push(...newImage)
       setImages(newImages)
     }
+    setLoading(false)
   }
   const renderImage = (item) => {
     return (
@@ -63,6 +67,13 @@ const ImageGridViewRenderer = (props) => {
   }
   return (
     <React.Fragment>
+      {
+      loading && (
+      <div className="spinnerContainer">
+        <div className="spinner"></div>
+      </div>
+      )
+      }
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Photo Sharing App</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
